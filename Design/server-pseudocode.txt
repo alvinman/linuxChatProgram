@@ -1,0 +1,60 @@
+Create Stream Socket:
+    - IF port is specified in command line
+        * Assign port to local variable 
+      ELSE
+        * Assign default TCP port to local variable
+    - Create TCP listening socket
+    - Set TCP listening socket to be re-usable immediately after exit
+    - Initialize sockaddr_in structure to local port and to accept any connections from clients
+    - Bind socket with sockaddr_in structure
+    - Specify number of server listen requests
+    - Initialize and index available entries in client array 
+    - Add TCP listening socket to reading file descriptor set
+    - GOTO Listen for Connections / Data
+
+Start Listen for Connections / Data:
+    - DO FOREVER
+        - Start listening on read file descriptor set for any data received
+            * IF there is a new client connection
+                * Start Client Connect Thread and GOTO Update Host List / Descriptor
+              ELSE
+                * Start Data Received Thread and GOTO Read Data
+
+Update Host List / Descriptor:
+    - Accept client connection 
+    - Save client descriptor to client array
+    - Add new descriptor to read descriptor set
+    - Set new max index to client array
+
+Read Data:
+    - LOOP UNTIL max index in client array
+        IF socket is invalid
+            * skip
+        ELSE
+            * IF client socket has data
+                * IF bytes received is 0
+                    * GOTO Remove Client from list
+              ELSE
+                * Read data on socket into buffer 
+                * Save socket that has data
+                * GOTO Write Data
+
+Remove Client from list:
+    - Close socket
+    - Clear socket from read set
+    - Remove index from client array
+
+Write Data:
+    - FOR EACH in client array
+        * IF saved socket is equal to client array index
+            * skip
+          ELSE
+            * Write data buffer to socket
+    - GOTO Thread Exit
+
+Thread Exit:
+    - Terminate thread
+
+Server End:
+    - Close listening socket
+    - Free any allocated resources
