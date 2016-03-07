@@ -1,0 +1,47 @@
+Init GUI:
+	- Initialize main dialog window using qT QWidget and setupUi function call
+	- setup up signal and slot connections for GUI buttons
+	- If user presses Connect
+		- GOTO Connect state
+
+Connect:
+	- Validate the IP address entered
+		- If IP address invalid
+			- Display error message
+			- Return
+	- Validate the Port entered
+		- If port invalid
+			- Display error messsage
+			- Return
+		- If no port specified, use default port
+	- Create TCP socket using socket() call with AF_INET and SOCK_STREAM parameters
+	- Setup address struct using IP address and port
+	- Call connect() using initialized socket and address struct
+	- If connect() fails
+		- Display error message
+		- Return
+	- Spawn the receive messages thread, GOTO Wait for Data state
+	- GOTO Idle state(Wait for User Input)
+
+Idle (Wait for User Input):
+	- If user presses Send Message button
+		- Spawn the send messages thread, GOTO Send Data state
+
+Send Data:
+	- Get the text from the input box
+	- Place text into buffer
+	- Transmit data buffer through the socket using send() call 
+	- END thread, GOTO Idle state
+
+Wait for Data(select):
+	- Use select() call to wait on the socket for incoming data
+	- If select() call signals
+		- WHILE we can read data using read()
+			- read data from socket using read()
+			- store data into a buffer
+		- GOTO Print to screen/Log to file state
+
+Print to screen/Log to file:
+	- Print data in buffer onto the screen
+	- Write data in buffer into the file
+	- GOTO Wait for Data state
