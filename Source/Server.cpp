@@ -3,7 +3,7 @@
 int main(int argc, char* argv[])
 {
 	int i, arg;
-	int listen_sd, new_sd, port;
+	int listen_sd, port;
 	struct sockaddr_in server;
 	SelectHelper set;
 	
@@ -48,16 +48,19 @@ int main(int argc, char* argv[])
     {
         set.rset = set.allset;               // structure assignment
         set.nready = select(set.maxfd + 1, &set.rset, NULL, NULL, NULL);
-        
+
         if (FD_ISSET(listen_sd, &set.rset)) // new client connection
         {
             //Start Update Host List - Descriptor Thread
-			std::thread connectThread(handleConnect, set, listen_sd, new_sd);
+			std::thread acceptThread(handleConnect, std::ref(set), std::ref(listen_sd));
+			acceptThread.join();	
         }
         else
         {
             //Start Read Data Thread
-			std::thread dataThread(handleData, set);
+            std::cout << "Creating data thread" << std::endl;
+			std::thread dataThread(handleData, std::ref(set));
+			dataThread.join();
         }
     } 
     return 1;

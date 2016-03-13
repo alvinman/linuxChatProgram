@@ -8,9 +8,10 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <thread>
+#include <string.h>
 
 #define SERVER_TCP_PORT 7000        // Default port
-#define BUFLEN  255                 //Buffer length
+#define BUFLEN  80                  //Buffer length
 #define TRUE    1
 #define LISTENQ 10
 #define MAXLINE 4096
@@ -24,6 +25,6 @@ typedef struct SelectHelper
 
 void bindAddressToSock(struct sockaddr_in &server, int &port);
 
-void handleConnect(SelectHelper helper, int listen_sd, int new_sd);
+void handleConnect(SelectHelper &helper, int &listen_sd);
 
-void handleData(SelectHelper helper);
+void handleData(SelectHelper &helper);
