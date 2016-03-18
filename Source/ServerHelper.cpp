@@ -71,9 +71,6 @@ void handleConnect(SelectHelper &helper, int &listen_sd)
 
 	//Add new client hostname to list
 	helper.connectedClients.insert(std::pair<int, std::string>(new_sd, inet_ntoa(client.sin_addr)));
-	std::cout << "New client has connected." << std::endl << "Printing client list: " << std::endl;
-    std::cout << "Remote Address: " << inet_ntoa(client.sin_addr) << " has connected." << std::endl;
-
 	
 	printClientList(std::ref(helper));
 
@@ -135,7 +132,6 @@ void handleData(SelectHelper &helper)
         {
             continue;
         }
-
 		if (FD_ISSET(sockfd, &helper.rset))
 		{
 			bp = buf;
@@ -144,7 +140,6 @@ void handleData(SelectHelper &helper)
 			{
 				bytes_to_read -= n;
 			}
-
             std::cout << "Received: " << bp << std::endl;
 
 			//Check if Username message
@@ -175,13 +170,12 @@ void handleData(SelectHelper &helper)
 				//Check connected host names list for socket and remove entry
 				if (helper.connectedClients.find(sockfd) != helper.connectedClients.end())
 				{
-					std::cout << "Erasing client from list" << std::endl;
 					helper.connectedClients.erase(sockfd);
 					printClientList(std::ref(helper));
 				}
+				//Check user name list for socket and remove entry
 				if (clientUsernames.find(sockfd) != clientUsernames.end())
 				{
-					std::cout << "Erasing client from user list" << std::endl;
 					clientUsernames.erase(sockfd);
 					std::string clientTable = constructClientTable();	
 					for (int j = 0; j < LISTENQ - 1; j++)
@@ -200,6 +194,22 @@ void handleData(SelectHelper &helper)
 		}
 	}	
 }
+/*
+        FUNCTION:      	printClientList 
+
+        PROGRAMMER:     Martin Minkov
+
+        INTERFACE:      void printClientList(SelectHelper &helper)
+							SelectHelper &helper:
+                                - The structure which holds all relevant lists which
+                                    contains all connected clients 
+
+        RETURNS:        void
+
+        NOTES:         	Prints all connected clients to stdout 
+
+*/
+
 void printClientList(SelectHelper &helper)
 {
 	//Print updated list to stdout
@@ -208,6 +218,26 @@ void printClientList(SelectHelper &helper)
 		std::cout << "Host Name: " << it->second << std::endl;	
 	}
 }
+/*
+        FUNCTION:      	checkServerRequest 
+
+        PROGRAMMER:     Martin Minkov
+
+        INTERFACE:      int checkServerRequest(int port, char* bp)
+                            SelectHelper &helper:
+                                - int port:
+									- Used to store receiving port
+								- char* bp: 
+									- The buffer that holds the username
+
+
+        RETURNS:        void
+
+        NOTES:         Parses message to check if its username client message. If USERNAME: is detected
+						the user name will be parsed and stored inside a list.
+
+*/
+
 int checkServerRequest(int port, char* bp)
 {
 	std::string tempBuf(bp);
@@ -223,6 +253,18 @@ int checkServerRequest(int port, char* bp)
 	}
 	else return 0;
 }
+/*
+        FUNCTION:       constructClientTable
+
+        PROGRAMMER:     Martin Minkov
+
+        INTERFACE:      std::string constructClientTable()
+
+        RETURNS:        void
+
+        NOTES:          Contucts a user list out of all currently connected clients.
+*/
+
 std::string constructClientTable()
 {
 	std::string temp = "";
