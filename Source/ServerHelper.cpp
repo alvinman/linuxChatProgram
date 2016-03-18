@@ -179,6 +179,19 @@ void handleData(SelectHelper &helper)
 					helper.connectedClients.erase(sockfd);
 					printClientList(std::ref(helper));
 				}
+				if (clientUsernames.find(sockfd) != clientUsernames.end())
+				{
+					std::cout << "Erasing client from user list" << std::endl;
+					clientUsernames.erase(sockfd);
+					std::string clientTable = constructClientTable();	
+					for (int j = 0; j < LISTENQ - 1; j++)
+					{
+						//Send client table to all clients
+						if (helper.client[j] > 0)
+							send(helper.client[j], clientTable.c_str(), BUFLEN, 0);   // echo to client
+					}
+
+				}
 				std::cout << "Closing socket :" << sockfd << std::endl;
 				close(sockfd);
 				FD_CLR(sockfd, &helper.allset);
