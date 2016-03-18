@@ -69,7 +69,13 @@ void handleConnect(SelectHelper &helper, int &listen_sd)
     if ((new_sd = accept(listen_sd, (struct sockaddr *) &client, &client_len)) == -1)
         perror("accept error");
 
+	//Add new client hostname to list
+	helper.connectedClients.insert(std::pair<int, std::string>(new_sd, inet_ntoa(client.sin_addr)));
+	std::cout << "New client has connected." << std::endl << "Printing client list: " << std::endl;
     std::cout << "Remote Address: " << inet_ntoa(client.sin_addr) << " has connected." << std::endl;
+
+	
+	printClientList(std::ref(helper));
 
     for (i = 0; i < FD_SETSIZE; i++)
     {
@@ -141,24 +147,77 @@ void handleData(SelectHelper &helper)
 
             std::cout << "Received: " << bp << std::endl;
 
-			//Broadcast to all clients
-            for (int j = 0; j < LISTENQ - 1; j++)
-            {
-                if (helper.client[j] > 0)
-                    send(helper.client[j], bp, BUFLEN, 0);   // echo to client
-            }
-			
+			//Check if Username message
+			if (checkServerRequest(sockfd, bp))
+			{
+				std::string clientTable = constructClientTable();
+				//Broadcast chat message to all other clients
+				for (int j = 0; j < LISTENQ - 1; j++)
+				{
+					//Send client table to all clients
+					if (helper.client[j] > 0)
+						send(helper.client[j], clientTable.c_str(), BUFLEN, 0);   // echo to client
+				}
+			}
+			else
+			{
+				//Broadcast chat message to all other clients
+				for (int j = 0; j < LISTENQ - 1; j++)
+				{
+					if (sockfd != helper.client[j] && helper.client[j] > 0)
+						send(helper.client[j], bp, BUFLEN, 0);   // echo to client
+				}
+			}
+
 			//Connection closed by client
 			if (n == 0)
-			{
+			{	
+				//Check connected host names list for socket and remove entry
+				if (helper.connectedClients.find(sockfd) != helper.connectedClients.end())
+				{
+					std::cout << "Erasing client from list" << std::endl;
+					helper.connectedClients.erase(sockfd);
+					printClientList(std::ref(helper));
+				}
 				std::cout << "Closing socket :" << sockfd << std::endl;
 				close(sockfd);
 				FD_CLR(sockfd, &helper.allset);
 				helper.client[i] = -1;
 			}
 		}
-		// no more readable descriptors	
-		//if (--helper.nready <= 0)
-       	//	break;        	
 	}	
+}
+void printClientList(SelectHelper &helper)
+{
+	//Print updated list to stdout
+	for (auto it = helper.connectedClients.cbegin(); it != helper.connectedClients.cend(); it++)
+	{
+		std::cout << "Host Name: " << it->second << std::endl;	
+	}
+}
+int checkServerRequest(int port, char* bp)
+{
+	std::string tempBuf(bp);
+	std::size_t found = tempBuf.find("USERNAME: ");
+
+	//User joined message
+	if (found != std::string::npos)
+	{
+		//Add new client to list
+		tempBuf = tempBuf.substr(found+10);
+		clientUsernames.insert(std::pair<int, std::string>(port, tempBuf));
+		return 1;
+	}
+	else return 0;
+}
+std::string constructClientTable()
+{
+	std::string temp = "";
+	int i = 1;	
+
+	for (auto it = clientUsernames.cbegin(); it != clientUsernames.cend(); it++, i++)
+	{
+		temp += "USER" + std::to_string(i) + ": " +  it->second + " "; 
+	}
+	return temp;
 }

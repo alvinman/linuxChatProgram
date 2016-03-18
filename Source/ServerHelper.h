@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <thread>
 #include <string.h>
+#include <map>
 
 #define SERVER_TCP_PORT 7000        // Default port
 #define BUFLEN  80                  //Buffer length
@@ -21,10 +22,19 @@ typedef struct SelectHelper
     int maxi, maxfd, nready;
     fd_set rset, allset;
     int client[FD_SETSIZE];
+    std::map<int, std::string> connectedClients;
 } SelectHelper;
+
+static std::map<int, std::string> clientUsernames;
 
 void bindAddressToSock(struct sockaddr_in &server, int &port);
 
 void handleConnect(SelectHelper &helper, int &listen_sd);
 
 void handleData(SelectHelper &helper);
+
+void printClientList(SelectHelper& helper);
+
+int checkServerRequest(int port, char* bp);
+
+std::string constructClientTable();

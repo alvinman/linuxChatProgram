@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
     set.maxi    = -1;                        // index into client[] array
 
     for (i = 0; i < FD_SETSIZE; i++)
-            set.client[i] = -1;              // -1 indicates available entry
+        set.client[i] = -1;              // -1 indicates available entry
 
     FD_ZERO(&set.allset);
     FD_SET(listen_sd, &set.allset);
@@ -58,7 +58,6 @@ int main(int argc, char* argv[])
         else
         {
             //Start Read Data Thread
-            std::cout << "Creating data thread" << std::endl;
 			std::thread dataThread(handleData, std::ref(set));
 			dataThread.join();
         }
