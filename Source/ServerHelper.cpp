@@ -231,7 +231,7 @@ void printClientList(SelectHelper &helper)
 									- The buffer that holds the username
 
 
-        RETURNS:        void
+        RETURNS:       int: Returns 1 if username is found, otherwise 0 
 
         NOTES:         Parses message to check if its username client message. If USERNAME: is detected
 						the user name will be parsed and stored inside a list.
@@ -272,7 +272,7 @@ std::string constructClientTable()
 
 	for (auto it = clientUsernames.cbegin(); it != clientUsernames.cend(); it++, i++)
 	{
-		temp += "USER" + std::to_string(i) + ": " +  it->second + " "; 
+		temp += "USER: " +  it->second + " "; 
 	}
 	return temp;
 }
