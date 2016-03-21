@@ -16,7 +16,8 @@ public slots:
     void process();
 
 signals:
-    void updateChatBox(QString message);
+    void updateChatBox(QString username, QString message);
+    void updateUserList(QVector<QString> userList);
     void finished();
 
 private:

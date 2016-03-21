@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <netdb.h>
 #include <iostream>
+#include <sstream>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -14,6 +15,7 @@
 #include <unistd.h>
 #include <thread>
 #include <string.h>
+#include <vector>
 
 #define BUFLEN 80
 

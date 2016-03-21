@@ -49,34 +49,66 @@ void Client::on_bConnect_clicked(){
         exit(1);
     }
 
+    // Send the username to the server on initial connect
+    QString username = ui->etUsername->text();
+    QString usernameMessage = "USERNAME: " + username;
+
+    // convert qstring message into char * message for sending
+    std::string messageStr = usernameMessage.toStdString();
+    char* messageChar = new char [messageStr.size()+1];
+    strcpy(messageChar, messageStr.c_str());
+
+    // Send a message indicating username
+    std::thread sendThread(sendMessage, std::ref(connect_sd), std::ref(messageChar));
+    sendThread.join();
+
     ui->tvStatus->setText("Connected");
 
     //create thread to receive messages
     QThread* receiveThread = new QThread;
     ReceiveThread* receiveWorker = new ReceiveThread(connect_sd);
     receiveWorker->moveToThread(receiveThread);
-    connect(receiveWorker, SIGNAL(updateChatBox(QString)), this, SLOT(updateChat(QString)));
+    connect(receiveWorker, SIGNAL(updateChatBox(QString, QString)), this, SLOT(updateChat(QString, QString)));
+    connect(receiveWorker, SIGNAL(updateUserList(QVector<QString>)), this, SLOT(updateUsers(QVector<QString>)));
 //    connect(receiveWorker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
     connect(receiveThread, SIGNAL(started()), receiveWorker, SLOT(process()));
     connect(receiveWorker, SIGNAL(finished()), receiveThread, SLOT(quit()));
     connect(receiveWorker, SIGNAL(finished()), receiveWorker, SLOT(deleteLater()));
     connect(receiveThread, SIGNAL(finished()), receiveThread, SLOT(deleteLater()));
     receiveThread->start();
-
 }
 
 void Client::on_bSendMessage_clicked(){
+    //get message
     QString message = ui->etMessage->text();
+
+    //get username
+    QString username = ui->etUsername->text();
+
+    //append message to the chat window
+    Client::updateChat(username + ": ", message);
+
+    //prepend username to message
+    message = username + ": " + message;
+
+    //prepend message tag to message
+    message = "MESSAGE: " + message;
+
+    // convert qstring message into char * message for sending
     std::string messageStr = message.toStdString();
     char* messageChar = new char [messageStr.size()+1];
     strcpy(messageChar, messageStr.c_str());
 
-    //append message to the chat window
-    ui->dtMessageHistory->append(message);
+    // clear the message box
+    ui->etMessage->clear();
 
     //send message to the server
     std::thread sendThread(sendMessage, std::ref(connect_sd), std::ref(messageChar));
     sendThread.join();
+}
+
+void Client::on_bExport_clicked(){
+    Client::exportChatToText();
 }
 
 QString Client::getServerIP(){
@@ -87,6 +119,32 @@ QString Client::getServerPort(){
     return ui->etPort->text();
 }
 
-void Client::updateChat(QString message){
-    ui->dtMessageHistory->append(message);
+QString Client::getUsername(){
+    return ui->etUsername->text();
+}
+
+void Client::updateChat(QString username, QString message){
+    QString styledString="<span style=\" font-size:12pt; font-weight:600; color:#FF0c32;\" > ";
+    styledString.append(username);
+    styledString.append("</span>");
+    styledString.append(message);
+    ui->dtMessageHistory->insertHtml(styledString);
+    ui->dtMessageHistory->append("\n");
+}
+
+void Client::updateUsers(QVector<QString> userList){
+    ui->dtUserList->clear();
+    for(auto& user : userList){
+       ui->dtUserList->addItem(user);
+    }
+}
+
+void Client::exportChatToText(){
+    QString chatHistory = ui->dtMessageHistory->toPlainText();
+    QFile file("chat_log.txt");
+    if(file.open(QIODevice::WriteOnly)){
+        QTextStream stream(&file);
+        stream << chatHistory << endl;
+    }
+    file.close();
 }

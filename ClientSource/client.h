@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QThread>
+#include <QFile>
+#include <QTextStream>
 #include "clienthelper.h"
 
 namespace Ui {
@@ -18,9 +20,12 @@ public:
     ~Client();
     QString getServerIP();
     QString getServerPort();
+    QString getUsername();
+    void exportChatToText();
 
 public slots:
-    void updateChat(QString message);
+    void updateChat(QString username, QString message);
+    void updateUsers(QVector<QString> userList);
 
 private:
     Ui::Client *ui;
@@ -29,6 +34,7 @@ private:
 private slots:
     void on_bConnect_clicked();
     void on_bSendMessage_clicked();
+    void on_bExport_clicked();
 };
 
 #endif // CLIENT_H
