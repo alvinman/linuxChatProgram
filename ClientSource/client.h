@@ -30,6 +30,7 @@ public slots:
 private:
     Ui::Client *ui;
     int connect_sd;
+    void updateStatusMessage(QString message);
 
 private slots:
     void on_bConnect_clicked();

@@ -24,6 +24,15 @@ void Client::on_bConnect_clicked(){
     std::string hostnameStr;
     char* hostname;
 
+    //check username before allowing any connections
+    QString username = ui->etUsername->text();
+    if(username.isEmpty()){
+        Client::updateStatusMessage("Please enter username");
+        return;
+    } else {
+        Client::updateStatusMessage("");
+    }
+
     //get server ip
     hostnameStr = Client::getServerIP().toStdString();
     hostname = new char [hostnameStr.size()+1];
@@ -31,13 +40,21 @@ void Client::on_bConnect_clicked(){
 
     //get server port
     port = Client::getServerPort().toInt();
+    if(port == NULL){
+        port = 7000;
+    }
 
     //create tcp socket
     if ((connect_sd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
         perror("Cannot Create Socket!");
 
     //setup address struct
-    setupAddrStruct(server, hp, hostname, port);
+    if(setupAddrStruct(server, hp, hostname, port) == -1){
+        Client::updateStatusMessage("Invalid IP");
+        return;
+    } else {
+        Client::updateStatusMessage("");
+    }
 
     // Connecting to the server
     // need to call connect with the :: prefix, to prevent it getting mixed
@@ -46,11 +63,11 @@ void Client::on_bConnect_clicked(){
     {
         fprintf(stderr, "Can't connect to server\n");
         perror("connect");
-        exit(1);
+        Client::updateStatusMessage("Can't connect to server");
+        return;
     }
 
     // Send the username to the server on initial connect
-    QString username = ui->etUsername->text();
     QString usernameMessage = "USERNAME: " + username;
 
     // convert qstring message into char * message for sending
@@ -70,7 +87,6 @@ void Client::on_bConnect_clicked(){
     receiveWorker->moveToThread(receiveThread);
     connect(receiveWorker, SIGNAL(updateChatBox(QString, QString)), this, SLOT(updateChat(QString, QString)));
     connect(receiveWorker, SIGNAL(updateUserList(QVector<QString>)), this, SLOT(updateUsers(QVector<QString>)));
-//    connect(receiveWorker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
     connect(receiveThread, SIGNAL(started()), receiveWorker, SLOT(process()));
     connect(receiveWorker, SIGNAL(finished()), receiveThread, SLOT(quit()));
     connect(receiveWorker, SIGNAL(finished()), receiveWorker, SLOT(deleteLater()));
@@ -147,4 +163,8 @@ void Client::exportChatToText(){
         stream << chatHistory << endl;
     }
     file.close();
+}
+
+void Client::updateStatusMessage(QString message){
+    ui->statusMessage->setText(message);
 }

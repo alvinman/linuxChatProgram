@@ -19,11 +19,10 @@
 
 #define BUFLEN 80
 
-void setupAddrStruct(struct sockaddr_in &server, struct hostent *hp,
+int setupAddrStruct(struct sockaddr_in &server, struct hostent *hp,
 	char *hostname, int &port);
 
 void sendMessage(int &connect_sd, char * message);
-//void receiveMessage(int &connect_sd);
 
 #endif // CLIENTHELPER_H
 
