@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QTime>
 #include "clienthelper.h"
+#include <QScrollBar>
 
 namespace Ui {
 class Client;

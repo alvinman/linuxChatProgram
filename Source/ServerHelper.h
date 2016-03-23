@@ -12,7 +12,7 @@
 #include <map>
 
 #define SERVER_TCP_PORT 7000        // Default port
-#define BUFLEN  80                  //Buffer length
+#define BUFLEN  1024                //Buffer length
 #define TRUE    1
 #define LISTENQ 10
 #define MAXLINE 4096

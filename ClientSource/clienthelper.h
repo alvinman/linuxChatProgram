@@ -17,7 +17,7 @@
 #include <string.h>
 #include <vector>
 
-#define BUFLEN 80
+#define BUFLEN 1024
 
 int setupAddrStruct(struct sockaddr_in &server, struct hostent *hp,
 	char *hostname, int &port);

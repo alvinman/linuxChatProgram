@@ -26,6 +26,9 @@ void Client::on_bConnect_clicked(){
     std::string hostnameStr;
     char* hostname;
 
+    //clear the status message if any
+    Client::updateStatusMessage("Connecting...");
+
     //check username before allowing any connections
     QString username = ui->etUsername->text();
     if(username.isEmpty()){
@@ -163,6 +166,8 @@ void Client::updateChat(QString username, QString message){
     finalString.append(message);
     ui->dtMessageHistory->insertHtml(finalString);
     ui->dtMessageHistory->append("\n");
+    ui->dtMessageHistory->verticalScrollBar()->setValue(ui->dtMessageHistory->verticalScrollBar()->maximum());
+
 }
 
 void Client::updateUsers(QVector<QString> userList){
