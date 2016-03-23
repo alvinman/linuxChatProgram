@@ -7,6 +7,7 @@ Client::Client(QWidget *parent) :
     ui(new Ui::Client)
 {
     ui->setupUi(this);
+    connect(ui->etMessage, SIGNAL(returnPressed()), ui->bSendMessage, SIGNAL(clicked()));
 }
 
 Client::~Client()
@@ -40,7 +41,7 @@ void Client::on_bConnect_clicked(){
 
     //get server port
     port = Client::getServerPort().toInt();
-    if(port == NULL){
+    if(port == 0){
         port = 7000;
     }
 
@@ -161,10 +162,18 @@ void Client::exportChatToText(){
     if(file.open(QIODevice::WriteOnly)){
         QTextStream stream(&file);
         stream << chatHistory << endl;
+        Client::updateExportMessage("Chat log exported");
+    } else {
+        Client::updateExportMessage("Export error");
+        return;
     }
     file.close();
 }
 
 void Client::updateStatusMessage(QString message){
     ui->statusMessage->setText(message);
+}
+
+void Client::updateExportMessage(QString message){
+    ui->exportMessage->setText(message);
 }

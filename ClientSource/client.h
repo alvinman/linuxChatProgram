@@ -31,11 +31,15 @@ private:
     Ui::Client *ui;
     int connect_sd;
     void updateStatusMessage(QString message);
+    void updateExportMessage(QString message);
 
 private slots:
     void on_bConnect_clicked();
     void on_bSendMessage_clicked();
     void on_bExport_clicked();
+
+signals:
+    void returnPressed();
 };
 
 #endif // CLIENT_H
