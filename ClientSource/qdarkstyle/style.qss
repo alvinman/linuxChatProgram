@@ -44,8 +44,8 @@ QToolTip
 QWidget
 {
     color: silver;
-    background-color: #302F2F;
-    selection-background-color:#3d8ec9;
+    background-color: #1F1F1F;
+    selection-background-color:#8CBE5F;
     selection-color: black;
     background-clip: border;
     border-image: none;
@@ -54,13 +54,13 @@ QWidget
 
 QWidget:item:hover
 {
-    background-color: #78879b;
+    background-color: #686868;
     color: black;
 }
 
 QWidget:item:selected
 {
-    background-color: #3d8ec9;
+    background-color: #407213;
 }
 
 QCheckBox
@@ -335,7 +335,7 @@ QAbstractItemView
 
 QWidget:focus, QMenuBar:focus
 {
-    border: 1px solid #78879b;
+    border: 1px solid #FF0000;
 }
 
 QTabWidget:focus, QCheckBox:focus, QRadioButton:focus, QSlider:focus
@@ -514,9 +514,14 @@ QTextEdit
     border: 1px solid #3A3939;
 }
 
+QTextBrowser
+{
+    background-color: #171717;
+}
+
 QPlainTextEdit
 {
-    background-color: #201F1F;;
+    background-color: #201F1F;
     color: silver;
     border-radius: 2px;
     border: 1px solid #3A3939;
@@ -606,10 +611,10 @@ QToolBar::separator:vertical {
 
 QPushButton
 {
-    color: silver;
-    background-color: #302F2F;
+    color: white;
+    background-color: #BC1D12;
     border-width: 1px;
-    border-color: #4A4949;
+    border-color: #2B2B2B;
     border-style: solid;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -621,7 +626,7 @@ QPushButton
 
 QPushButton:disabled
 {
-    background-color: #302F2F;
+    background-color: #C06325;
     border-width: 1px;
     border-color: #3A3939;
     border-style: solid;
@@ -634,7 +639,7 @@ QPushButton:disabled
 }
 
 QPushButton:focus {
-    background-color: #219ebd;
+    background-color: #BC1D12;
     color: white;
 }
 
@@ -656,8 +661,8 @@ QPushButton:checked{
 
 QComboBox:hover,QPushButton:hover,QAbstractSpinBox:hover,QLineEdit:hover,QTextEdit:hover,QPlainTextEdit:hover,QAbstractView:hover,QTreeView:hover
 {
-    border: 1px solid #219ebd;
-    color: silver;
+    border: 1px solid #FF0000;
+    color: white;
 }
 
 QComboBox:on

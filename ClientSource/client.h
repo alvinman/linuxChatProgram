@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QFile>
 #include <QTextStream>
+#include <QTime>
 #include "clienthelper.h"
 
 namespace Ui {
@@ -30,6 +31,7 @@ public slots:
 private:
     Ui::Client *ui;
     int connect_sd;
+    bool connected;
     void updateStatusMessage(QString message);
     void updateExportMessage(QString message);
 

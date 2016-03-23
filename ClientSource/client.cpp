@@ -8,6 +8,7 @@ Client::Client(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->etMessage, SIGNAL(returnPressed()), ui->bSendMessage, SIGNAL(clicked()));
+    connected = false;
 }
 
 Client::~Client()
@@ -66,6 +67,8 @@ void Client::on_bConnect_clicked(){
         perror("connect");
         Client::updateStatusMessage("Can't connect to server");
         return;
+    } else {
+        connected = true;
     }
 
     // Send the username to the server on initial connect
@@ -96,8 +99,17 @@ void Client::on_bConnect_clicked(){
 }
 
 void Client::on_bSendMessage_clicked(){
+
+    if(connected != true){
+        Client::updateStatusMessage("You are not connected");
+        return;
+    }
+
     //get message
     QString message = ui->etMessage->text();
+    if(message.isEmpty()){
+        return;
+    }
 
     //get username
     QString username = ui->etUsername->text();
@@ -141,11 +153,15 @@ QString Client::getUsername(){
 }
 
 void Client::updateChat(QString username, QString message){
-    QString styledString="<span style=\" font-size:12pt; font-weight:600; color:#FF0c32;\" > ";
-    styledString.append(username);
-    styledString.append("</span>");
-    styledString.append(message);
-    ui->dtMessageHistory->insertHtml(styledString);
+    QString finalString;
+    QTime time = QTime::currentTime();
+    QString timeString = "[" + time.toString() + "]";
+    QString timeStyle="<span style=\" font-size:9pt; color:#979797;\" > ";
+    finalString.append(timeStyle).append(timeString).append("</span>");
+    QString messageStyle="<span style=\" font-size:12pt; font-weight:600; color:#FF0c32;\" > ";
+    finalString.append(messageStyle).append(username).append("</span>");
+    finalString.append(message);
+    ui->dtMessageHistory->insertHtml(finalString);
     ui->dtMessageHistory->append("\n");
 }
 
