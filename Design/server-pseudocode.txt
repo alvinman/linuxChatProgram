@@ -22,6 +22,8 @@ Start Listen for Connections / Data:
 
 Update Host List / Descriptor:
     - Accept client connection 
+	- Add connection to connected clients list
+	- Print connected client table to server stdout
     - Save client descriptor to client array
     - Add new descriptor to read descriptor set
     - Set new max index to client array
@@ -36,10 +38,20 @@ Read Data:
                     * GOTO Remove Client from list
               ELSE
                 * Read data on socket into buffer 
-                * Save socket that has data
-                * GOTO Write Data
+				* IF buffer is message type USERNAME
+					Save Username table in buffer
+					GOTO Write Data
+				  IF buffer is message type MESSAGE
+					Save Message in buffer
+					GOTO Write Data	
 
 Remove Client from list:
+	- Save username of client that disconnected into buffer
+	- Print connected client table to server stdout
+	- Broadcast Disconect message appended with username to all clients
+	- Erase client from usernames table
+	- Erase client from connected Clients table
+	- Broadcast connected client table to all clients
     - Close socket
     - Clear socket from read set
     - Remove index from client array
