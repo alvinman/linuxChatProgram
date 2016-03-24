@@ -9,11 +9,12 @@ Client::Client(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->etMessage, SIGNAL(returnPressed()), ui->bSendMessage, SIGNAL(clicked()));
     connected = false;
+    ui->bDisconnect->setEnabled(false);
 }
 
 Client::~Client()
 {
-    ::close (connect_sd);
+    shutdown(connect_sd, SHUT_WR);
     delete ui;
 }
 
@@ -88,7 +89,7 @@ void Client::on_bConnect_clicked(){
     std::thread sendThread(sendMessage, std::ref(connect_sd), std::ref(messageChar));
     sendThread.join();
 
-    ui->tvStatus->setText("Connected");
+    ui->globalStatusMessages->setText("Connected");
     Client::toggleInput(false);
 
     //create thread to receive messages
@@ -101,6 +102,7 @@ void Client::on_bConnect_clicked(){
     connect(receiveWorker, SIGNAL(finished()), receiveThread, SLOT(quit()));
     connect(receiveWorker, SIGNAL(finished()), receiveWorker, SLOT(deleteLater()));
     connect(receiveThread, SIGNAL(finished()), receiveThread, SLOT(deleteLater()));
+
     receiveThread->start();
 }
 
@@ -165,7 +167,7 @@ void Client::updateChat(QString username, QString message){
     QString timeString = "[" + time.toString() + "]";
     QString timeStyle="<span style=\" font-size:9pt; color:#979797;\" > ";
     finalString.append(timeStyle).append(timeString).append("</span>");
-    QString messageStyle="<span style=\" font-size:12pt; font-weight:600; color:#FF0c32;\" > ";
+    QString messageStyle="<span style=\" font-size:12pt; font-weight:600; color:#FFA000;\" > ";
     finalString.append(messageStyle).append(username).append("</span>");
     finalString.append(message);
     ui->dtMessageHistory->insertHtml(finalString);
@@ -187,29 +189,31 @@ void Client::exportChatToText(){
     if(file.open(QIODevice::WriteOnly)){
         QTextStream stream(&file);
         stream << chatHistory << endl;
-        Client::updateExportMessage("Chat log exported");
+        Client::updateStatusMessage("Chat log exported");
     } else {
-        Client::updateExportMessage("Export error");
+        Client::updateStatusMessage("Export error");
         return;
     }
     file.close();
 }
 
 void Client::updateStatusMessage(QString message){
-    ui->statusMessage->setText(message);
-}
-
-void Client::updateExportMessage(QString message){
-    ui->exportMessage->setText(message);
+    ui->globalStatusMessages->setText(message);
 }
 
 void Client::toggleInput(bool state){
     ui->etUsername->setDisabled(!state);
     ui->etIP->setDisabled(!state);
     ui->etPort->setDisabled(!state);
+    ui->bConnect->setEnabled(state);
+    ui->bDisconnect->setEnabled(!state);
 }
 
 void Client::on_bDisconnect_clicked(){
-    fprintf(stderr, "disconnect clicked");
-    ::close(connect_sd);
+    shutdown(connect_sd, SHUT_WR);
+    Client::toggleInput(true);
+    ui->dtUserList->clear();
+    connected = false;
+    Client::updateStatusMessage("Disconnected");
+
 }

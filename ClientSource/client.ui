@@ -31,234 +31,195 @@
   <property name="windowTitle">
    <string>Client</string>
   </property>
-  <widget class="QGroupBox" name="groupBox">
+  <widget class="QListWidget" name="dtUserList">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
+     <y>299</y>
+     <width>146</width>
+     <height>292</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="dtMessageHistory">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>60</y>
+     <width>511</width>
+     <height>488</height>
+    </rect>
+   </property>
+   <property name="cursor" stdset="0">
+    <cursorShape>IBeamCursor</cursorShape>
+   </property>
+   <property name="tabChangesFocus">
+    <bool>false</bool>
+   </property>
+   <property name="overwriteMode">
+    <bool>false</bool>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+   <property name="placeholderText">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="etMessage">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>550</y>
+     <width>325</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="clearButtonEnabled">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="bSendMessage">
+   <property name="geometry">
+    <rect>
+     <x>498</x>
+     <y>550</y>
+     <width>110</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="globalStatusMessages">
+   <property name="geometry">
+    <rect>
+     <x>-10</x>
+     <y>0</y>
+     <width>711</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="usersOnline">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>280</y>
+     <width>91</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Users Online</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="bExport">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>550</y>
+     <width>71</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Export</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="bConnect">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>180</y>
+     <width>146</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Connect</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="bDisconnect">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
      <y>220</y>
-     <width>251</width>
-     <height>391</height>
+     <width>146</width>
+     <height>40</height>
     </rect>
    </property>
-   <property name="title">
-    <string>Online Users:</string>
+   <property name="text">
+    <string>Disconnect</string>
    </property>
-   <widget class="QListWidget" name="dtUserList">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>30</y>
-      <width>231</width>
-      <height>351</height>
-     </rect>
-    </property>
-   </widget>
   </widget>
-  <widget class="QGroupBox" name="groupBox_2">
+  <widget class="QLineEdit" name="etUsername">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>80</y>
-     <width>401</width>
-     <height>531</height>
+     <x>20</x>
+     <y>60</y>
+     <width>146</width>
+     <height>40</height>
     </rect>
    </property>
-   <property name="title">
-    <string>Chat</string>
+   <property name="placeholderText">
+    <string>Username</string>
    </property>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>30</y>
-      <width>381</width>
-      <height>491</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
-     <item>
-      <widget class="QTextBrowser" name="dtMessageHistory">
-       <property name="cursor" stdset="0">
-        <cursorShape>IBeamCursor</cursorShape>
-       </property>
-       <property name="tabChangesFocus">
-        <bool>false</bool>
-       </property>
-       <property name="overwriteMode">
-        <bool>false</bool>
-       </property>
-       <property name="textInteractionFlags">
-        <set>Qt::NoTextInteraction</set>
-       </property>
-       <property name="placeholderText">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QLineEdit" name="etMessage">
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="bSendMessage">
-         <property name="text">
-          <string>Send</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QLineEdit" name="etIP">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>20</y>
-     <width>135</width>
-     <height>53</height>
+     <x>20</x>
+     <y>100</y>
+     <width>146</width>
+     <height>40</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <widget class="QPushButton" name="bExport">
-      <property name="text">
-       <string>Export Chat Log</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="exportMessage">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="whatsThis">
+    <string/>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="placeholderText">
+    <string>IP</string>
+   </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QLineEdit" name="etPort">
    <property name="geometry">
     <rect>
-     <x>21</x>
-     <y>22</y>
-     <width>237</width>
-     <height>190</height>
+     <x>20</x>
+     <y>140</y>
+     <width>146</width>
+     <height>40</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label_3">
-        <property name="minimumSize">
-         <size>
-          <width>81</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Username:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="etUsername"/>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="minimumSize">
-         <size>
-          <width>81</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>IP</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="etIP">
-        <property name="whatsThis">
-         <string/>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="minimumSize">
-         <size>
-          <width>81</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Port</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="etPort">
-        <property name="statusTip">
-         <string/>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
-      <item>
-       <widget class="QPushButton" name="bConnect">
-        <property name="text">
-         <string>Connect</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="bDisconnect">
-        <property name="text">
-         <string>Disconnect</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="statusMessage">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="tvStatus">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="statusTip">
+    <string/>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="placeholderText">
+    <string>Port</string>
+   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -267,7 +228,6 @@
   <tabstop>etIP</tabstop>
   <tabstop>etPort</tabstop>
   <tabstop>bConnect</tabstop>
-  <tabstop>bExport</tabstop>
   <tabstop>etMessage</tabstop>
   <tabstop>bSendMessage</tabstop>
   <tabstop>dtUserList</tabstop>

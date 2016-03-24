@@ -21,7 +21,6 @@ void ReceiveThread::process() {
     int bytes_to_read;
     char *bp;
     char buf[BUFLEN];
-//    std::vector<std::string> userList;
     QVector<QString> userList;
 
     while(1){
@@ -37,7 +36,6 @@ void ReceiveThread::process() {
         std::string s(bp);
         std::string msg(bp);
 
-        std::cout << s << std::endl;
         std::string userDelimiter = "USER: ";
         std::string msgDelimiter = "MESSAGE: ";
         size_t pos = 0;
@@ -52,9 +50,7 @@ void ReceiveThread::process() {
             while(s.find(userDelimiter) != std::string::npos){
                 //delete the user string
                 pos = s.find(userDelimiter);
-                std::cout << "pos: " << pos << std::endl;
                 s.erase(pos, userDelimiter.length());
-                std::cout << "after delete: " << s << std::endl;
             }
 
             //parse the resulting tokens into an array
@@ -80,9 +76,6 @@ void ReceiveThread::process() {
             pos = msg.find(':');
             username = msg.substr(0, pos+1);
             msg.erase(0, pos+1);
-
-            std::cout << "username: " << username << std::endl;
-            std::cout << "msg: " << msg << std::endl;
 
             //convert string to QString
             QString qUsername = QString::fromUtf8(username.c_str());

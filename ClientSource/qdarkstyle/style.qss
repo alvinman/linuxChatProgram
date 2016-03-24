@@ -44,8 +44,8 @@ QToolTip
 QWidget
 {
     color: silver;
-    background-color: #1F1F1F;
-    selection-background-color:#8CBE5F;
+    background-color: #262626;
+    selection-background-color:#777777;
     selection-color: black;
     background-clip: border;
     border-image: none;
@@ -60,7 +60,7 @@ QWidget:item:hover
 
 QWidget:item:selected
 {
-    background-color: #407213;
+    background-color: #848484;
 }
 
 QCheckBox
@@ -335,7 +335,7 @@ QAbstractItemView
 
 QWidget:focus, QMenuBar:focus
 {
-    border: 1px solid #FF0000;
+    border: 1px solid #00DBFD;
 }
 
 QTabWidget:focus, QCheckBox:focus, QRadioButton:focus, QSlider:focus
@@ -612,7 +612,7 @@ QToolBar::separator:vertical {
 QPushButton
 {
     color: white;
-    background-color: #BC1D12;
+    background-color: #0097A7;
     border-width: 1px;
     border-color: #2B2B2B;
     border-style: solid;
@@ -624,9 +624,13 @@ QPushButton
     outline: none;
 }
 
+#dtMessageHistory:hover, #etMessage {
+    background-color: #2E2E2E;
+}
+
 QPushButton:disabled
 {
-    background-color: #C06325;
+    background-color: #727272;
     border-width: 1px;
     border-color: #3A3939;
     border-style: solid;
@@ -635,11 +639,11 @@ QPushButton:disabled
     padding-left: 10px;
     padding-right: 10px;
     /*border-radius: 2px;*/
-    color: #454545;
+    color: #5B5B5B;
 }
 
 QPushButton:focus {
-    background-color: #BC1D12;
+    background-color: #00BCD4;
     color: white;
 }
 
@@ -661,7 +665,7 @@ QPushButton:checked{
 
 QComboBox:hover,QPushButton:hover,QAbstractSpinBox:hover,QLineEdit:hover,QTextEdit:hover,QPlainTextEdit:hover,QAbstractView:hover,QTreeView:hover
 {
-    border: 1px solid #FF0000;
+    background-color: #00BCD4;
     color: white;
 }
 
@@ -760,6 +764,13 @@ QAbstractSpinBox::down-arrow:hover
 QLabel
 {
     border: 0px solid black;
+}
+
+QLabel#globalStatusMessages {
+    background: #696969;
+    color: #FFFFFF;
+    padding-left: 15px;
+    font-weight: bold;
 }
 
 QTabWidget{
@@ -1220,4 +1231,17 @@ QSplitter::handle:horizontal {
 
 QSplitter::handle:vertical {
     height: 1px;
+}
+
+#bSendMessage{
+    font-weight: bold;
+}
+
+#etPort:hover, #etIP:hover, #etUsername:hover {
+    background-color: #474F51;
+}
+
+#usersOnline{
+    color: #FFC107;
+    font-weight: bold;
 }

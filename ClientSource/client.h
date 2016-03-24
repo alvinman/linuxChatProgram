@@ -8,6 +8,7 @@
 #include <QTime>
 #include "clienthelper.h"
 #include <QScrollBar>
+#include <QToolBar>
 
 namespace Ui {
 class Client;
@@ -34,7 +35,6 @@ private:
     int connect_sd;
     bool connected;
     void updateStatusMessage(QString message);
-    void updateExportMessage(QString message);
     void toggleInput(bool state);
 
 private slots:
@@ -45,6 +45,7 @@ private slots:
 
 signals:
     void returnPressed();
+    void finished();
 };
 
 #endif // CLIENT_H
