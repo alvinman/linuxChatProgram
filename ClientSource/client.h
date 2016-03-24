@@ -9,6 +9,7 @@
 #include "clienthelper.h"
 #include <QScrollBar>
 #include <QToolBar>
+#include "receivethread.h"
 
 namespace Ui {
 class Client;
@@ -36,6 +37,8 @@ private:
     bool connected;
     void updateStatusMessage(QString message);
     void toggleInput(bool state);
+    QThread* receiveThread;
+    ReceiveThread* receiveWorker;
 
 private slots:
     void on_bConnect_clicked();
