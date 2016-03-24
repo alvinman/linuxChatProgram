@@ -27,7 +27,7 @@ public:
     void exportChatToText();
 
 public slots:
-    void updateChat(QString username, QString message);
+    void updateChat(QString username, QString message, QString type);
     void updateUsers(QVector<QString> userList);
 
 private:

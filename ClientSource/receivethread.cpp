@@ -38,6 +38,7 @@ void ReceiveThread::process() {
 
         std::string userDelimiter = "USER: ";
         std::string msgDelimiter = "MESSAGE: ";
+        std::string disconnectDelimiter = "DISCONNECT: ";
         size_t pos = 0;
 
         //USER message, update client list box
@@ -82,7 +83,22 @@ void ReceiveThread::process() {
             QString qMsg = QString::fromUtf8(msg.c_str());
 
             //emit the updateChatBox signal with username and message
-            emit updateChatBox(qUsername, qMsg);
+            emit updateChatBox(qUsername, qMsg, "message");
+        }
+
+        //disconnect msg, notify clients that a user has disconnected
+        if(msg.find(disconnectDelimiter) != std::string::npos){
+
+            std::string username;
+
+            //delete the "DISCONNECT: " tag
+            msg.erase(0, disconnectDelimiter.length());
+
+            //convert string to QString
+            QString qUsername = QString::fromUtf8(msg.c_str());
+
+            //emit the updateChatBox signal with username
+            emit updateChatBox(qUsername, " has disconnected from the server.", "disconnect");
         }
     }
 

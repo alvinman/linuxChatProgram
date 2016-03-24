@@ -10,6 +10,7 @@ Client::Client(QWidget *parent) :
     connect(ui->etMessage, SIGNAL(returnPressed()), ui->bSendMessage, SIGNAL(clicked()));
     connected = false;
     ui->bDisconnect->setEnabled(false);
+    Client::updateStatusMessage("Connect to start chatting!");
 }
 
 Client::~Client()
@@ -96,7 +97,7 @@ void Client::on_bConnect_clicked(){
     QThread* receiveThread = new QThread;
     ReceiveThread* receiveWorker = new ReceiveThread(connect_sd);
     receiveWorker->moveToThread(receiveThread);
-    connect(receiveWorker, SIGNAL(updateChatBox(QString, QString)), this, SLOT(updateChat(QString, QString)));
+    connect(receiveWorker, SIGNAL(updateChatBox(QString, QString, QString)), this, SLOT(updateChat(QString, QString, QString)));
     connect(receiveWorker, SIGNAL(updateUserList(QVector<QString>)), this, SLOT(updateUsers(QVector<QString>)));
     connect(receiveThread, SIGNAL(started()), receiveWorker, SLOT(process()));
     connect(receiveWorker, SIGNAL(finished()), receiveThread, SLOT(quit()));
@@ -123,7 +124,7 @@ void Client::on_bSendMessage_clicked(){
     QString username = Client::getUsername();
 
     //append message to the chat window
-    Client::updateChat(username + ": ", message);
+    Client::updateChat(username + ": ", message, "message");
 
     //prepend username to message
     message = username + ": " + message;
@@ -161,15 +162,23 @@ QString Client::getUsername(){
     return ui->etUsername->text().split(" ").at(0);
 }
 
-void Client::updateChat(QString username, QString message){
+void Client::updateChat(QString username, QString message, QString type){
     QString finalString;
     QTime time = QTime::currentTime();
     QString timeString = "[" + time.toString() + "]";
     QString timeStyle="<span style=\" font-size:9pt; color:#979797;\" > ";
     finalString.append(timeStyle).append(timeString).append("</span>");
+    if(type == "disconnect"){
+        QString italicStyle="<span style=\" font-size: 10pt; font-style: italic; color #FFFFFF;\" >";
+        finalString.append(italicStyle);
+    }
     QString messageStyle="<span style=\" font-size:12pt; font-weight:600; color:#FFA000;\" > ";
     finalString.append(messageStyle).append(username).append("</span>");
     finalString.append(message);
+    if(type == "disconnect"){
+        finalString.append("</span>");
+    }
+
     ui->dtMessageHistory->insertHtml(finalString);
     ui->dtMessageHistory->append("\n");
     ui->dtMessageHistory->verticalScrollBar()->setValue(ui->dtMessageHistory->verticalScrollBar()->maximum());
@@ -215,5 +224,4 @@ void Client::on_bDisconnect_clicked(){
     ui->dtUserList->clear();
     connected = false;
     Client::updateStatusMessage("Disconnected");
-
 }
