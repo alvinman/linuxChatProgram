@@ -1,19 +1,77 @@
 #include "receivethread.h"
 
-// --- CONSTRUCTOR ---
+/*
+        SOURCE FILE:        receivethread.cpp
+        
+        PROGRAM:            Linux Chat
+
+        FUNCTIONS:          ReceiveThread::ReceiveThread(int socket);
+                            ReceiveThread::~ReceiveThread();
+                            void ReceiveThread::process();
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        NOTES:              Defines the logic to handle listening for incoming message
+                            broadcasts from the server.  Checks to see what kind of messages
+                            are sent and handles them accordingly.
+*/
+
+/*
+        FUNCTION:           ReceiveThread Constructor
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          ReceiveThread::ReceiveThread(int socket);
+                                socket - socket to receive data from
+
+        RETURNS:            N/A
+
+        NOTES:              Constructor for a new receive thread instance.
+*/
 ReceiveThread::ReceiveThread(int socket) {
-    // you could copy data from constructor arguments to internal variables here.
     m_socket = socket;
     abort = false;
 }
 
-// --- DECONSTRUCTOR ---
+/*
+        FUNCTION:           Client Destructor
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          ReceiveThread::~ReceiveThread();
+
+        RETURNS:            N/A
+
+        NOTES:              Destructor for receive thread instance.
+*/
 ReceiveThread::~ReceiveThread() {
     // free resources
 }
 
-// --- PROCESS ---
-// Start processing data.
+/*
+        FUNCTION:           process
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          void ReceiveThread::process();
+
+        RETURNS:            void
+
+        NOTES:              Handles the reading of data from the socket, and determines
+                            the type of message being read, and handles them accordingly.
+                            Messages with a USER tag are parsed into usernames to update
+                            the host list.  Messages with a MESSAGE tag are parsed into
+                            messages sent by other clients.  Messages with a DISCONNECT tag
+                            are parsed into disconnect status strings.
+*/
 void ReceiveThread::process() {
     // allocate resources using new here
     qRegisterMetaType<QVector<QString>>("userVector");

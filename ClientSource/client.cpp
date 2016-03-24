@@ -2,6 +2,52 @@
 #include "ui_client.h"
 #include "receivethread.h"
 
+/*
+        SOURCE FILE:        client.cpp
+        
+        PROGRAM:            Linux Chat
+
+        FUNCTIONS:          Client::Client(QWidget *parent) :
+                                QWidget(parent),
+                                ui(new Ui::Client);
+                            Client::~Client();
+                            void Client::on_bConnect_clicked();
+                            void Client::on_bSendMessage_clicked();
+                            void Client::on_bExport_clicked();
+                            QString Client::getServerIP();
+                            QString Client::getServerPort();
+                            QString Client::getUsername();
+                            void Client::updateChat(QString username, QString message, QString type);
+                            void Client::updateUsers(QVector<QString> userList);
+                            void Client::exportChatToText();
+                            void Client::updateStatusMessage(QString message);
+                            void Client::toggleInput(bool state);
+                            void Client::on_bDisconnect_clicked();
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        NOTES:              Defines the main qT window of the client module. It provides all the logic
+                            to handle user input requests, and creating the sending/receiving threads.
+                            Handles the formatting of the message strings sent to the server.
+*/
+
+/*
+        FUNCTION:           Client Constructor
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          Client::Client(QWidget *parent) :
+                                QWidget(parent),
+                                ui(new Ui::Client);
+
+        RETURNS:            N/A
+
+        NOTES:              Constructor for a new client instance.
+*/
 Client::Client(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Client)
@@ -13,15 +59,43 @@ Client::Client(QWidget *parent) :
     Client::updateStatusMessage("Connect to start chatting!");
 }
 
+/*
+        FUNCTION:           Client Destructor
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          Client::~Client();
+
+        RETURNS:            N/A
+
+        NOTES:              Destructor for client instance.
+*/
 Client::~Client()
 {
     shutdown(connect_sd, SHUT_WR);
     delete ui;
 }
 
+/*
+        FUNCTION:           on_bConnect_clicked
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          void Client::on_bConnect_clicked()
+
+        RETURNS:            void
+
+        NOTES:              Defines the logic to connect to the server once the connect
+                            button is clicked.  Grabs the connection parameters, creates
+                            the socket, address struct, and connects to server.  Also
+                            creates the listening thread for receiving broadcasted messages.
+*/
 void Client::on_bConnect_clicked(){
 
-    // int connect_sd;
     int port;
     struct sockaddr_in server;
     struct hostent *hp;
@@ -108,6 +182,20 @@ void Client::on_bConnect_clicked(){
 
 }
 
+/*
+        FUNCTION:           on_bSendMessage_clicked
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          void Client::on_bSendMessage_clicked()
+
+        RETURNS:            void
+
+        NOTES:              Defines the logic send a user's chat message to the server. Formats
+                            the message string appropriately and starts the sendThread.
+*/
 void Client::on_bSendMessage_clicked(){
 
     if(connected != true){
@@ -146,23 +234,93 @@ void Client::on_bSendMessage_clicked(){
     sendThread.join();
 }
 
+/*
+        FUNCTION:           on_bExport_clicked
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          void Client::on_bExport_clicked()
+
+        RETURNS:            void
+
+        NOTES:              Handler function for the export button, calls the method
+                            to export the chat history to a text file.
+*/
 void Client::on_bExport_clicked(){
     Client::exportChatToText();
 }
 
+/*
+        FUNCTION:           getServerIP
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          QString Client::getServerIP()
+
+        RETURNS:            QString
+
+        NOTES:              Returns the server ip typed into the ip input.
+*/
 QString Client::getServerIP(){
     return ui->etIP->text();
 }
 
+/*
+        FUNCTION:           getServerPort
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          QString Client::getServerPort()
+
+        RETURNS:            QString
+
+        NOTES:              Returns the server port typed into the port input.
+*/
 QString Client::getServerPort(){
     return ui->etPort->text();
 }
 
+/*
+        FUNCTION:           getUsername
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          QString Client::getUsername()
+
+        RETURNS:            QString
+
+        NOTES:              Returns the username defined in the username input.
+*/
 QString Client::getUsername(){
     //only take the first word of username, if there are multiple words
     return ui->etUsername->text().split(" ").at(0);
 }
 
+/*
+        FUNCTION:           updateChat
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          void Client::updateChat(QString username, QString message, QString type)
+                                username - Username defined by user
+                                message - the message user typed in chat input
+                                type - user / message / disconnect
+
+        RETURNS:            void
+
+        NOTES:              Formats the received message string based on the message and type received,
+                            and inserts it into the chat window.
+*/
 void Client::updateChat(QString username, QString message, QString type){
     QString finalString;
     QTime time = QTime::currentTime();
@@ -186,6 +344,20 @@ void Client::updateChat(QString username, QString message, QString type){
 
 }
 
+/*
+        FUNCTION:           updateUsers
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          void Client::updateUsers(QVector<QString> userList)
+                                userList - vector containing all the users currently connected
+
+        RETURNS:            void
+
+        NOTES:              Updates the user panel with the currently connected list of users.
+*/
 void Client::updateUsers(QVector<QString> userList){
     ui->dtUserList->clear();
     for(auto& user : userList){
@@ -193,6 +365,20 @@ void Client::updateUsers(QVector<QString> userList){
     }
 }
 
+/*
+        FUNCTION:           exportChatToText
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          void Client::exportChatToText()
+
+        RETURNS:            void
+
+        NOTES:              Creates a text file and writes all existing chat messages into
+                            the external file.
+*/
 void Client::exportChatToText(){
     QString chatHistory = ui->dtMessageHistory->toPlainText();
     QFile file("chat_log.txt");
@@ -207,10 +393,39 @@ void Client::exportChatToText(){
     file.close();
 }
 
+/*
+        FUNCTION:           updateStatusMessage
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          void Client::updateStatusMessage(QString message)
+                                message - status message to display
+
+        RETURNS:            void
+
+        NOTES:              Updates the status message with the given status string.
+*/
 void Client::updateStatusMessage(QString message){
     ui->globalStatusMessages->setText(message);
 }
 
+/*
+        FUNCTION:           toggleInput
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          void Client::toggleInput(bool state)
+                                state - true / false, depending on the state of the connection
+
+        RETURNS:            void
+
+        NOTES:              Enables or disables the user inputs and connect/disconnect buttons
+                            according to the state.
+*/
 void Client::toggleInput(bool state){
     ui->etUsername->setDisabled(!state);
     ui->etIP->setDisabled(!state);
@@ -219,6 +434,20 @@ void Client::toggleInput(bool state){
     ui->bDisconnect->setEnabled(!state);
 }
 
+/*
+        FUNCTION:           on_bDisconnect_clicked
+
+        PROGRAMMER:         Alvin Man
+
+        DESIGNER:           Alvin Man
+
+        INTERFACE:          void Client::on_bDisconnect_clicked()
+
+        RETURNS:            void
+
+        NOTES:              Handles logic to disconnect a user session and reset the client
+                            to be able to connect again.
+*/
 void Client::on_bDisconnect_clicked(){
     receiveWorker->abort = true;
 //    receiveThread->terminate();
