@@ -124,7 +124,7 @@ void handleConnect(SelectHelper &helper, int &listen_sd)
 */
 void handleData(SelectHelper &helper)
 {
-    int sockfd, bytes_to_read, n;
+    int sockfd, bytes_to_read, n, serverRequest = 0; 
     char *bp, buf[BUFLEN];
     for (int i = 0; i <= helper.maxi; i++)
     {
@@ -135,6 +135,7 @@ void handleData(SelectHelper &helper)
 		if (FD_ISSET(sockfd, &helper.rset))
 		{
 			bp = buf;
+			memset(bp, 0, BUFLEN);
 			bytes_to_read = BUFLEN;
 			if ((n = recv(sockfd, bp, bytes_to_read, 0)) > 0)
 			{
@@ -143,7 +144,7 @@ void handleData(SelectHelper &helper)
             std::cout << "Received: " << bp << std::endl;
 
 			//Check if Username message
-			if (checkServerRequest(sockfd, bp))
+			if ((serverRequest = checkServerRequest(sockfd, bp)) == 1)
 			{
 				std::string clientTable = constructClientTable();
 				//Broadcast chat message to all other clients
@@ -154,7 +155,7 @@ void handleData(SelectHelper &helper)
 						send(helper.client[j], clientTable.c_str(), BUFLEN, 0);   // echo to client
 				}
 			}
-			else
+			else if (serverRequest == 2)
 			{
 				//Broadcast chat message to all other clients
 				for (int j = 0; j < LISTENQ - 1; j++)
@@ -251,7 +252,11 @@ int checkServerRequest(int port, char* bp)
 		clientUsernames.insert(std::pair<int, std::string>(port, tempBuf));
 		return 1;
 	}
-	else return 0;
+	found = tempBuf.find("MESSAGE: ");
+	if (found != std::string::npos)
+		return 2;
+
+	return 0;
 }
 /*
         FUNCTION:       constructClientTable
