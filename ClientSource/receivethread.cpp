@@ -17,8 +17,6 @@ void ReceiveThread::process() {
     // allocate resources using new here
     qRegisterMetaType<QVector<QString>>("userVector");
 
-    qDebug("Hello World! - inside thread processing");
-
     int n;
     int bytes_to_read;
     char *bp;
@@ -36,11 +34,7 @@ void ReceiveThread::process() {
         }
 
         //check if it is a USER msg or MESSAGE msg
-        //CHANGE IT BACK TO THIS STRING WHEN MARTIN CHANGES IT
         std::string s(bp);
-
-        //debug strings only
-//        std::string s("USER: x3 USER: cxpson USER: gelox6");
         std::string msg(bp);
 
         std::cout << s << std::endl;

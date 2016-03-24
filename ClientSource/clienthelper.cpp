@@ -30,20 +30,3 @@ int setupAddrStruct(struct sockaddr_in &server, struct hostent *hp,
 void sendMessage(int &connect_sd, char * message){
 	send (connect_sd, message, BUFLEN, 0);
 }
-
-//void receiveMessage(int &connect_sd){
-//	int bytes_to_read;
-//	int n;
-//	char *bp;
-//    char buf[BUFLEN];
-
-//    fprintf(stderr, "inside receiveMessage");
-
-//    bp = buf;
-//    bytes_to_read = BUFLEN;
-//    if ((n = recv(connect_sd, bp, bytes_to_read, 0)) > 0)
-//    {
-//        bytes_to_read -= n;
-//    }
-//    fprintf(stderr, buf);
-//}

@@ -142,92 +142,92 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>239</width>
+     <x>21</x>
+     <y>22</y>
+     <width>237</width>
      <height>190</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_4">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="label_3">
-          <property name="minimumSize">
-           <size>
-            <width>81</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Username:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="etUsername"/>
-        </item>
-       </layout>
+       <widget class="QLabel" name="label_3">
+        <property name="minimumSize">
+         <size>
+          <width>81</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Username:</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="minimumSize">
-           <size>
-            <width>81</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>IP</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="etIP">
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QLineEdit" name="etUsername"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="minimumSize">
+         <size>
+          <width>81</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>IP</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="minimumSize">
-           <size>
-            <width>81</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Port</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="etPort">
-          <property name="statusTip">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QLineEdit" name="etIP">
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="minimumSize">
+         <size>
+          <width>81</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Port</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="etPort">
+        <property name="statusTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
        <widget class="QPushButton" name="bConnect">
         <property name="text">
@@ -236,13 +236,20 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="statusMessage">
+       <widget class="QPushButton" name="bDisconnect">
         <property name="text">
-         <string/>
+         <string>Disconnect</string>
         </property>
        </widget>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="statusMessage">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QLabel" name="tvStatus">

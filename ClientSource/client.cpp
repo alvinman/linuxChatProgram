@@ -30,7 +30,7 @@ void Client::on_bConnect_clicked(){
     Client::updateStatusMessage("Connecting...");
 
     //check username before allowing any connections
-    QString username = ui->etUsername->text();
+    QString username = Client::getUsername();
     if(username.isEmpty()){
         Client::updateStatusMessage("Please enter username");
         return;
@@ -50,8 +50,10 @@ void Client::on_bConnect_clicked(){
     }
 
     //create tcp socket
-    if ((connect_sd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+    if ((connect_sd = socket(AF_INET, SOCK_STREAM, 0)) == -1){
         perror("Cannot Create Socket!");
+        return;
+    }
 
     //setup address struct
     if(setupAddrStruct(server, hp, hostname, port) == -1){
@@ -87,6 +89,7 @@ void Client::on_bConnect_clicked(){
     sendThread.join();
 
     ui->tvStatus->setText("Connected");
+    Client::toggleInput(false);
 
     //create thread to receive messages
     QThread* receiveThread = new QThread;
@@ -115,7 +118,7 @@ void Client::on_bSendMessage_clicked(){
     }
 
     //get username
-    QString username = ui->etUsername->text();
+    QString username = Client::getUsername();
 
     //append message to the chat window
     Client::updateChat(username + ": ", message);
@@ -152,7 +155,8 @@ QString Client::getServerPort(){
 }
 
 QString Client::getUsername(){
-    return ui->etUsername->text();
+    //only take the first word of username, if there are multiple words
+    return ui->etUsername->text().split(" ").at(0);
 }
 
 void Client::updateChat(QString username, QString message){
@@ -197,4 +201,15 @@ void Client::updateStatusMessage(QString message){
 
 void Client::updateExportMessage(QString message){
     ui->exportMessage->setText(message);
+}
+
+void Client::toggleInput(bool state){
+    ui->etUsername->setDisabled(!state);
+    ui->etIP->setDisabled(!state);
+    ui->etPort->setDisabled(!state);
+}
+
+void Client::on_bDisconnect_clicked(){
+    fprintf(stderr, "disconnect clicked");
+    ::close(connect_sd);
 }

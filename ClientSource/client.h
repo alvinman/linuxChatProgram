@@ -35,11 +35,13 @@ private:
     bool connected;
     void updateStatusMessage(QString message);
     void updateExportMessage(QString message);
+    void toggleInput(bool state);
 
 private slots:
     void on_bConnect_clicked();
     void on_bSendMessage_clicked();
     void on_bExport_clicked();
+    void on_bDisconnect_clicked();
 
 signals:
     void returnPressed();
