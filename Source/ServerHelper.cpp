@@ -169,6 +169,7 @@ void handleData(SelectHelper &helper)
 			//Connection closed by client
 			if (n == 0)
 			{	
+				std::map<int, std::string>::iterator found;
 				//Check connected host names list for socket and remove entry
 				if (helper.connectedClients.find(sockfd) != helper.connectedClients.end())
 				{
@@ -176,15 +177,20 @@ void handleData(SelectHelper &helper)
 					printClientList(std::ref(helper));
 				}
 				//Check user name list for socket and remove entry
-				if (clientUsernames.find(sockfd) != clientUsernames.end())
+				if ((found = clientUsernames.find(sockfd)) != clientUsernames.end())
 				{
+					std::string usernameTemp = "DISCONNECT: ";
+					usernameTemp += found->second;
 					clientUsernames.erase(sockfd);
 					std::string clientTable = constructClientTable();	
 					for (int j = 0; j < LISTENQ - 1; j++)
 					{
 						//Send client table to all clients
 						if (helper.client[j] > 0)
+						{
+							send(helper.client[j], usernameTemp.c_str(), BUFLEN, 0);   // echo to client
 							send(helper.client[j], clientTable.c_str(), BUFLEN, 0);   // echo to client
+						}
 					}
 
 				}
