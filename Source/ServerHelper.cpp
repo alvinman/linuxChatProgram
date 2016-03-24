@@ -72,6 +72,7 @@ void handleConnect(SelectHelper &helper, int &listen_sd)
 	//Add new client hostname to list
 	helper.connectedClients.insert(std::pair<int, std::string>(new_sd, inet_ntoa(client.sin_addr)));
 	
+	std::cout << "Client connected: " << std::endl;
 	printClientList(std::ref(helper));
 
     for (i = 0; i < FD_SETSIZE; i++)
@@ -141,7 +142,6 @@ void handleData(SelectHelper &helper)
 			{
 				bytes_to_read -= n;
 			}
-            std::cout << "Received: " << bp << std::endl;
 
 			//Check if Username message
 			if ((serverRequest = checkServerRequest(sockfd, bp)) == 1)
@@ -163,6 +163,7 @@ void handleData(SelectHelper &helper)
 					if (sockfd != helper.client[j] && helper.client[j] > 0)
 						send(helper.client[j], bp, BUFLEN, 0);   // echo to client
 				}
+            	std::cout << "Received: " << bp << std::endl;
 			}
 
 			//Connection closed by client
@@ -187,7 +188,7 @@ void handleData(SelectHelper &helper)
 					}
 
 				}
-				std::cout << "Closing socket :" << sockfd << std::endl;
+				std::cout << "Client Disconnected - Closing socket :" << sockfd << std::endl;
 				close(sockfd);
 				FD_CLR(sockfd, &helper.allset);
 				helper.client[i] = -1;
