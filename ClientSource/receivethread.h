@@ -11,6 +11,7 @@ class ReceiveThread : public QObject
 public:
     ReceiveThread(int socket);
     ~ReceiveThread();
+    bool abort;
 
 public slots:
     void process();

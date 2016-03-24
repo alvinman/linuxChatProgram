@@ -94,8 +94,8 @@ void Client::on_bConnect_clicked(){
     Client::toggleInput(false);
 
     //create thread to receive messages
-    QThread* receiveThread = new QThread;
-    ReceiveThread* receiveWorker = new ReceiveThread(connect_sd);
+    receiveThread = new QThread;
+    receiveWorker = new ReceiveThread(connect_sd);
     receiveWorker->moveToThread(receiveThread);
     connect(receiveWorker, SIGNAL(updateChatBox(QString, QString, QString)), this, SLOT(updateChat(QString, QString, QString)));
     connect(receiveWorker, SIGNAL(updateUserList(QVector<QString>)), this, SLOT(updateUsers(QVector<QString>)));
@@ -105,6 +105,7 @@ void Client::on_bConnect_clicked(){
     connect(receiveThread, SIGNAL(finished()), receiveThread, SLOT(deleteLater()));
 
     receiveThread->start();
+
 }
 
 void Client::on_bSendMessage_clicked(){
@@ -219,6 +220,9 @@ void Client::toggleInput(bool state){
 }
 
 void Client::on_bDisconnect_clicked(){
+    receiveWorker->abort = true;
+//    receiveThread->terminate();
+//    receiveWorker->finished();
     shutdown(connect_sd, SHUT_WR);
     Client::toggleInput(true);
     ui->dtUserList->clear();

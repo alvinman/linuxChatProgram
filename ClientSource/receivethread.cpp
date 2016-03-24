@@ -4,6 +4,7 @@
 ReceiveThread::ReceiveThread(int socket) {
     // you could copy data from constructor arguments to internal variables here.
     m_socket = socket;
+    abort = false;
 }
 
 // --- DECONSTRUCTOR ---
@@ -23,7 +24,7 @@ void ReceiveThread::process() {
     char buf[BUFLEN];
     QVector<QString> userList;
 
-    while(1){
+    while(abort != true){
 
         bp = buf;
         bytes_to_read = BUFLEN;
@@ -89,8 +90,6 @@ void ReceiveThread::process() {
         //disconnect msg, notify clients that a user has disconnected
         if(msg.find(disconnectDelimiter) != std::string::npos){
 
-            std::string username;
-
             //delete the "DISCONNECT: " tag
             msg.erase(0, disconnectDelimiter.length());
 
@@ -101,7 +100,6 @@ void ReceiveThread::process() {
             emit updateChatBox(qUsername, " has disconnected from the server.", "disconnect");
         }
     }
-
     emit finished();
 }
 
